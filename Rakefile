@@ -55,18 +55,18 @@ def swap_creds
   if File.file? 'credentials_personal'
     # switch from work to personal
     puts 'credentials_personal block'
-    FileUtils.mv 'credentials', 'credentials_work'        # NOTE: the order matters here!!!
+    FileUtils.mv 'credentials', 'credentials_work' # NOTE: the order matters here!!!
     FileUtils.mv 'credentials_personal', 'credentials'
 
-    puts "Using PERSONAL creds now".colorize(:red)
+    puts 'Using PERSONAL creds now'.colorize(:red)
     puts "Check yo'self though!!!".colorize(:green)
   elsif File.file? 'credentials_work'
     # switch from personal to work
     puts 'credentials work block'
-    FileUtils.mv 'credentials', 'credentials_personal'    # NOTE: the order matters here!!!
+    FileUtils.mv 'credentials', 'credentials_personal' # NOTE: the order matters here!!!
     FileUtils.mv 'credentials_work', 'credentials'
 
-    puts "Using WORK creds now!".colorize(:red)
+    puts 'Using WORK creds now!'.colorize(:red)
     puts "Check yo'self though!!!".colorize(:green)
   end
   # verify that the creds are correct
