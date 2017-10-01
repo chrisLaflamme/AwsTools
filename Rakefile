@@ -73,11 +73,38 @@ def swap_creds
   sh 'aws s3 ls'
 end
 
+def which_creds
+  # change to .aws directory
+  FileUtils.cd('/Users/claflamme/.aws')
+
+  # check for a credentials file
+  if File.file? 'credentials'
+    # check which creds is in use
+    if ((File.file? 'credentials_work') && (File.file? 'credentials'))
+      puts "PERSONAL CREDS".colorize(:green)
+    elsif ((File.file? 'credentials_personal') && (File.file? 'credentials'))
+      puts "WORK CREDS".colorize(:green)
+    else
+      "CHECK YOUR 6 HOMEY! YOUR SETUP IS BOGUS!"
+    end
+  else
+    puts "CHECK YOUR 6 HOMEY! YOU AIN'T GOT NO CREDS!".colorize(:red)
+  end
+
+  # if File.file? 'credentials_work' && File.file? 'credentials'
+  #   puts "PERSONAL CREDS".colorize(:green)
+  # elsif File.file? 'credentials_personal' && File.file? 'credentials'
+  #   puts "WORK CREDS".colorize(:green)
+  # else
+  #   puts "CHECK YOUR 6 HOMEY! THINGS BE WRONG!".colorize(:red)
+  # end
+end
+
 #
 # Rake Tasks
 ############################################################################################
 
-desc 'List All Ec2 Instances for all Regions'
+desc 'List all Ec2 instances for all regions'
 task :list_all_instances do
   show_all_instances
 end
@@ -85,4 +112,11 @@ end
 desc 'Swap AWS creds file from personal to work or vice versa'
 task :swap_creds do
   swap_creds
+end
+
+desc 'Show which creds are in use'
+task :which_creds do
+  puts "===========CREDS IN USE:============="
+  which_creds
+  puts "====================================="
 end
