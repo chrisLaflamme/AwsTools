@@ -90,14 +90,6 @@ def which_creds
   else
     puts "CHECK YOUR 6 HOMEY! YOU AIN'T GOT NO CREDS!".colorize(:red)
   end
-
-  # if File.file? 'credentials_work' && File.file? 'credentials'
-  #   puts "PERSONAL CREDS".colorize(:green)
-  # elsif File.file? 'credentials_personal' && File.file? 'credentials'
-  #   puts "WORK CREDS".colorize(:green)
-  # else
-  #   puts "CHECK YOUR 6 HOMEY! THINGS BE WRONG!".colorize(:red)
-  # end
 end
 
 #
