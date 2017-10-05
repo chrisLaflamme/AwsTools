@@ -20,6 +20,8 @@ require 'colorize'
   'sa-east-1'
 ]
 
+$user = "claflamme"
+
 #
 # Method Definitions
 ############################################################################################
@@ -49,7 +51,7 @@ def show_all_instances
 end
 
 def swap_creds
-  FileUtils.cd '/Users/claflamme/.aws'
+  FileUtils.cd "/Users/#{$user}/.aws"
   puts FileUtils.pwd
   # check what creds are being used now
   if File.file? 'credentials_personal'
@@ -75,7 +77,7 @@ end
 
 def which_creds
   # change to .aws directory
-  FileUtils.cd('/Users/claflamme/.aws')
+  FileUtils.cd("/Users/#{$user}/.aws")
 
   # check for a credentials file
   if File.file? 'credentials'
