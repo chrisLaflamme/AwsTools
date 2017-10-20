@@ -50,29 +50,41 @@ def show_all_instances
   end
 end
 
-def swap_creds
-  FileUtils.cd "/Users/#{$user}/.aws"
-  puts FileUtils.pwd
-  # check what creds are being used now
-  if File.file? 'credentials_personal'
-    # switch from work to personal
-    puts 'credentials_personal block'
-    FileUtils.mv 'credentials', 'credentials_work' # NOTE: the order matters here!!!
-    FileUtils.mv 'credentials_personal', 'credentials'
+def get_creds
+  dir = Dir.entries("/Users/#{$user}/.aws")
+  creds = []
 
-    puts 'Using PERSONAL creds now'.colorize(:red)
-    puts "Check yo'self though!!!".colorize(:green)
-  elsif File.file? 'credentials_work'
-    # switch from personal to work
-    puts 'credentials work block'
-    FileUtils.mv 'credentials', 'credentials_personal' # NOTE: the order matters here!!!
-    FileUtils.mv 'credentials_work', 'credentials'
-
-    puts 'Using WORK creds now!'.colorize(:red)
-    puts "Check yo'self though!!!".colorize(:green)
+  dir.each do |f|
+    if f.length > 11 && f[0,12] == "credentials_"
+      creds.push(f[12, f.length])
+    end
   end
-  # verify that the creds are correct
-  sh 'aws s3 ls'
+  creds
+end
+
+def switch_creds
+  creds = get_creds()
+  puts "Switch to wat?\n"
+
+  i = 0
+  creds.each do |o|
+    puts "#{i}: #{o}"
+    i += 1
+  end
+
+  selection = STDIN.gets.chomp.to_i
+  selection = creds[selection]
+
+  IO.copy_stream("/Users/#{$user}/.aws/credentials_#{selection}", "/Users/#{$user}/.aws/credentials")
+
+  # this is probably a bad idea
+  # File.open("/Users/#{$user}/.aws/credentials").each do |line|
+  #   puts line
+  # end
+  32.times { print "*".colorize(:green) }
+  puts "\n* Using #{selection.upcase!.colorize(:red)} creds now *\n"
+  32.times { print "*".colorize(:green) }
+  puts "\n"
 end
 
 def which_creds
@@ -100,17 +112,17 @@ end
 
 desc 'List all Ec2 instances for all regions'
 task :list_all_instances do
-  show_all_instances
+  show_all_instances()
 end
 
 desc 'Swap AWS creds file from personal to work or vice versa'
-task :swap_creds do
-  swap_creds
+task :switch_creds do
+  switch_creds()
 end
 
 desc 'Show which creds are in use'
 task :which_creds do
   puts "===========CREDS IN USE:============="
-  which_creds
+  which_creds()
   puts "====================================="
 end
