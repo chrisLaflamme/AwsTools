@@ -88,21 +88,14 @@ def switch_creds
 end
 
 def which_creds
-  # change to .aws directory
-  FileUtils.cd("/Users/#{$user}/.aws")
-
-  # check for a credentials file
-  if File.file? 'credentials'
-    # check which creds is in use
-    if ((File.file? 'credentials_work') && (File.file? 'credentials'))
-      puts "PERSONAL CREDS".colorize(:green)
-    elsif ((File.file? 'credentials_personal') && (File.file? 'credentials'))
-      puts "WORK CREDS".colorize(:green)
-    else
-      "CHECK YOUR 6 HOMEY! YOUR SETUP IS BOGUS!"
+  creds = get_creds
+  creds.each do |cred|
+    if FileUtils.compare_file("/Users/#{$user}/.aws/credentials", "/Users/#{$user}/.aws/credentials_#{cred}")
+      32.times { print "*".colorize(:green) }
+      puts "\n* You're using #{cred.upcase!.colorize(:red)} creds.*\n"
+      32.times { print "*".colorize(:green) }
+      puts "\n"
     end
-  else
-    puts "CHECK YOUR 6 HOMEY! YOU AIN'T GOT NO CREDS!".colorize(:red)
   end
 end
 
@@ -122,7 +115,5 @@ end
 
 desc 'Show which creds are in use'
 task :which_creds do
-  puts "===========CREDS IN USE:============="
   which_creds()
-  puts "====================================="
 end
