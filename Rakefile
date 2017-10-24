@@ -1,6 +1,7 @@
 require 'aws-sdk'
 require 'fileutils'
 require 'colorize'
+require 'os'
 
 # list of AWS regions
 @regions = [
@@ -20,8 +21,16 @@ require 'colorize'
   'sa-east-1'
 ]
 
-$user = "claflamme"
-
+# detect the OS and user to find the .aws directory
+if OS.mac?
+  $user = Dir.home[7, Dir.home.length].to_s
+elsif OS.windows?
+  $user = Dir.home[9, Dir.home.length].to_s
+# when OS.linux?
+  # TODO: build out Linux implentation (other OSs too?)
+else
+  puts "ERROR:".colorize(:red) + " Neither WINDOWS nor MAC OS detected.\n Unable to proceed."
+end
 #
 # Method Definitions
 ############################################################################################
