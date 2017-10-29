@@ -7,7 +7,7 @@ This project is holds a variety of rake tasks life with AWS a bit easier.
 
 :construction_worker: UNDER CONSTRUCTION: :construction_worker:
 
-Lists all instances and their state for all regions.
+Lists all instances and their state for all AWS regions.
 
 ### Creds
 #### switch_creds
