@@ -1,3 +1,5 @@
-/.bundle/
-/.Gemfile.lock/
-/scratch*
+.bundle/
+.Gemfile.lock/
+.DS_Store
+scratch*
+
